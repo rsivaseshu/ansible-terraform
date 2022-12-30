@@ -3,7 +3,7 @@ data "aws_ami" "amazon-linux" {
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-kernel-5.10-hvm-*-x86_64-gp2"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
   }
 
   filter {
@@ -15,11 +15,11 @@ data "aws_ami" "amazon-linux" {
 resource "aws_instance" "dev_machine" {
   ami = data.aws_ami.amazon-linux.id
   instance_type = "t2.micro"
-  key_name = "class-mum"
+  key_name = "rs-mum-9"
 
   tags = {
     Environment = "dev"
     Name = "${var.name}-server"
-    os = "redhat"
+    os = "ubuntu"
   }
 }
