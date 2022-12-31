@@ -1,5 +1,5 @@
 - name: This sets up an nginx webserver
-  hosts: ubuntu
+  hosts: all
   become: yes
   gather_facts: true
   tasks:
