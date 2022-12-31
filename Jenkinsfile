@@ -77,7 +77,7 @@ pipeline {
       }
       steps {
         dir('Ansible'){
-          ansiblePlaybook becomeUser: 'ansible', credentialsId: 'ansible-user', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'nginx.yaml', sudo: true, sudoUser: null
+          ansiblePlaybook become: true, becomeUser: 'ubuntu', credentialsId: 'ansible-user', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'nginx.yaml', sudoUser: null
         }
       }
     }
