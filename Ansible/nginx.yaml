@@ -3,23 +3,29 @@
   become: yes
   gather_facts: true
   tasks:
+  - name: update apt list
+    shell: sudo apt update -y
   - name: update cache in ubuntu
     apt:
       update_cache: yes
-  - name: "Install nginx and php packages"
-    package:
-        name:
-          - "nginx"
-          - "php"
-        state: present
+    when: ansible_os_family == "Debian"
+      
+  - name: apche2 installation on ubuntu
+    apt:
+      name: apache2
+      state: latest
+    when: ansible_os_family == "Debian"
+ 
+  - name: apache2 server start 
+    service:
+      name: apache2
+      state: started
+      enabled: yes
+    when: ansible_os_family == "Debian"
   - name: "copy code "
     copy:
         src: index.php
         dest: "/var/www/html/index.php"
-  - name: "Start httpd services"
-    service:
-      name: nginx
-      state: started
   - name: apt Install Packages
     apt: name={{item}} state=latest
     with_items:
