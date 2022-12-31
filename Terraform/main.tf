@@ -20,7 +20,10 @@ resource "aws_instance" "dev_machine" {
   user_data = "${file("user-data-apache.sh")}" 
 
   provisioner "local-exec" {
-    command = "echo ${aws_instance.dev_machine.public_ip} >> /etc/ansible/hosts"
+    command = <<EOT
+    "sudo rm -rf /etc/ansible/hosts"
+    "echo ${aws_instance.dev_machine.public_ip} >> /etc/ansible/hosts"
+    EOT
   }
   tags = {
     Environment = "dev"
