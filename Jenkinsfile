@@ -6,7 +6,7 @@ pipeline {
     }
   parameters {
     choice(
-      choices: ['destroy' , 'keep'],
+      choices: ['apply' , 'destroy'],
       description: '',
       name: 'REQUESTED_ACTION'
     )
@@ -42,6 +42,10 @@ pipeline {
       }
     }
 		stage('Waiting for Approvals') {
+      when {
+        // Only executed destroy is requested
+        expression { params.REQUESTED_ACTION == 'apply' }
+      }
     	steps{
       	input('Plan Validated? Please approve to create VPC Network in AWS?')
 			}
@@ -67,9 +71,13 @@ pipeline {
       }
     }
     stage('ansible deployment'){
+      when {
+        // Only executed destroy is requested
+        expression { params.REQUESTED_ACTION == 'apply' }
+      }
       steps {
         dir('Ansible'){
-          sh 'ansible-playbook -i /opt/ansible/inventory/aws_ec2.yaml apache.yaml '
+          ansiblePlaybook becomeUser: 'ansible', credentialsId: 'ansible-user', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'nginx.yaml', sudo: true, sudoUser: null
         }
       }
     }

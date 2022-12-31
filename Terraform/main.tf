@@ -1,4 +1,4 @@
-data "aws_ami" "amazon-linux" {
+data "aws_ami" "ami" {
   most_recent = true
 
   filter {
@@ -13,10 +13,15 @@ data "aws_ami" "amazon-linux" {
 }
 
 resource "aws_instance" "dev_machine" {
-  ami = data.aws_ami.amazon-linux.id
+  ami = data.aws_ami.ami.id
   instance_type = "t2.micro"
   key_name = "rs-mum-9"
 
+  user_data = "${file("user-data-apache.sh")}" 
+
+  provisioner "local-exec" {
+    command = "echo ${aws_instance.web.public_ip} >> /etc/ansible/hosts"
+  }
   tags = {
     Environment = "dev"
     Name = "${var.name}-server"
