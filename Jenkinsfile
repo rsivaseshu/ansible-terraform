@@ -77,7 +77,7 @@ pipeline {
       }
       steps {
         dir('Ansible'){
-          ansiblePlaybook become: true, becomeUser: 'ubuntu', credentialsId: 'ansible-key', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: 'nginx.yaml'
+          sh 'ansible-playbook nginx.yaml -i /etc/ansible/hosts  --private-key /etc/ansible/rs-mum-9.pem'
         }
       }
     }
