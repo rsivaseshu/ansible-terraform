@@ -70,6 +70,11 @@ pipeline {
         }    
       }
     }
+    stage('sleep'){
+      steps {
+        sleep 120
+      }
+    }
     stage('ansible deployment'){
       when {
         // Only executed destroy is requested
