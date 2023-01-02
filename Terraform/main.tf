@@ -21,7 +21,7 @@ resource "aws_instance" "dev_machine" {
 
   provisioner "local-exec" {
     command = <<EOT
-    "echo ${aws_instance.dev_machine.public_ip} > /etc/ansible/hosts"
+    "echo ${aws_instance.dev_machine.public_ip} >> /etc/ansible/hosts"
     EOT
   }
   tags = {

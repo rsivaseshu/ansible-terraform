@@ -2,23 +2,22 @@
   hosts: all
   become: yes
   gather_facts: true
+
   tasks:
-  - name: update apt list
-    shell: sudo apt update -y
   - name: update cache in ubuntu
     apt:
       update_cache: yes
     when: ansible_os_family == "Debian"
       
-  - name: apche2 installation on ubuntu
+  - name: nginx installation on ubuntu
     apt:
-      name: apache2
+      name: nginx
       state: latest
     when: ansible_os_family == "Debian"
  
-  - name: apache2 server start 
+  - name: nginx server start 
     service:
-      name: apache2
+      name: nginx
       state: started
       enabled: yes
     when: ansible_os_family == "Debian"
@@ -26,6 +25,10 @@
     copy:
         src: index.php
         dest: "/var/www/html/index.php"
+  - name: "copy index page "
+    copy:
+        src: index.html
+        dest: "/var/www/html/index.html"
   - name: apt Install Packages
     apt: name={{item}} state=latest
     with_items:
